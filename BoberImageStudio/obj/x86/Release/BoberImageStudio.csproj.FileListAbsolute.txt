@@ -1,0 +1,7 @@
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\bin\Release\BoberImageStudio.exe
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\bin\Release\BoberImageStudio.pdb
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Release\BoberImageStudio.BoberForm.resources
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Release\BoberImageStudio.Properties.Resources.resources
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Release\BoberImageStudio.csproj.GenerateResource.Cache
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Release\BoberImageStudio.exe
+C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Release\BoberImageStudio.pdb
