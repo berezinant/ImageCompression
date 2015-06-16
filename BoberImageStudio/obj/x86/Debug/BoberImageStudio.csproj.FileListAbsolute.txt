@@ -8,3 +8,9 @@ C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImage
 C:\Users\Anton\documents\visual studio 2010\Projects\BoberImageStudio\BoberImageStudio\obj\x86\Debug\BoberImageStudio.csprojResolveAssemblyReference.cache
 C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.exe
 C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.pdb
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\bin\Debug\BoberImageStudio.exe
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\bin\Debug\BoberImageStudio.pdb
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.csprojResolveAssemblyReference.cache
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.BoberForm.resources
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.Properties.Resources.resources
+C:\Users\Anton\Documents\GitHub\ImageCompression\BoberImageStudio\obj\x86\Debug\BoberImageStudio.csproj.GenerateResource.Cache

@@ -64,6 +64,14 @@
             this.YCrCbButton = new System.Windows.Forms.Button();
             this.DecimateButton = new System.Windows.Forms.Button();
             this.DecimateOptionBox = new System.Windows.Forms.ComboBox();
+            this.DCTButton = new System.Windows.Forms.Button();
+            this.QuantizeMethodBox = new System.Windows.Forms.ComboBox();
+            this.NCrCbBox = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.GammaBox = new System.Windows.Forms.NumericUpDown();
+            this.AlphaBox = new System.Windows.Forms.NumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.NYBox = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.OriginalImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ModifiedImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YTrack)).BeginInit();
@@ -72,6 +80,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.CbTrack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrTrack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YTrack1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NCrCbBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GammaBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AlphaBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NYBox)).BeginInit();
             this.SuspendLayout();
             // 
             // OriginalImageBox
@@ -424,11 +436,127 @@
             this.DecimateOptionBox.Size = new System.Drawing.Size(121, 21);
             this.DecimateOptionBox.TabIndex = 47;
             // 
+            // DCTButton
+            // 
+            this.DCTButton.Location = new System.Drawing.Point(599, 321);
+            this.DCTButton.Name = "DCTButton";
+            this.DCTButton.Size = new System.Drawing.Size(75, 23);
+            this.DCTButton.TabIndex = 48;
+            this.DCTButton.Text = "DCT";
+            this.DCTButton.UseVisualStyleBackColor = true;
+            this.DCTButton.Click += new System.EventHandler(this.DCTButton_Click);
+            // 
+            // QuantizeMethodBox
+            // 
+            this.QuantizeMethodBox.FormattingEnabled = true;
+            this.QuantizeMethodBox.Items.AddRange(new object[] {
+            "N",
+            "Q",
+            "JPEG"});
+            this.QuantizeMethodBox.Location = new System.Drawing.Point(694, 323);
+            this.QuantizeMethodBox.Name = "QuantizeMethodBox";
+            this.QuantizeMethodBox.Size = new System.Drawing.Size(121, 21);
+            this.QuantizeMethodBox.TabIndex = 49;
+            // 
+            // NCrCbBox
+            // 
+            this.NCrCbBox.Location = new System.Drawing.Point(771, 350);
+            this.NCrCbBox.Maximum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.NCrCbBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NCrCbBox.Name = "NCrCbBox";
+            this.NCrCbBox.Size = new System.Drawing.Size(43, 20);
+            this.NCrCbBox.TabIndex = 50;
+            this.NCrCbBox.Value = new decimal(new int[] {
+            32,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(596, 352);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(103, 13);
+            this.label7.TabIndex = 51;
+            this.label7.Text = "Coefficients amount:";
+            // 
+            // GammaBox
+            // 
+            this.GammaBox.Location = new System.Drawing.Point(771, 375);
+            this.GammaBox.Name = "GammaBox";
+            this.GammaBox.Size = new System.Drawing.Size(43, 20);
+            this.GammaBox.TabIndex = 52;
+            this.GammaBox.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // AlphaBox
+            // 
+            this.AlphaBox.Location = new System.Drawing.Point(724, 375);
+            this.AlphaBox.Name = "AlphaBox";
+            this.AlphaBox.Size = new System.Drawing.Size(43, 20);
+            this.AlphaBox.TabIndex = 53;
+            this.AlphaBox.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(596, 377);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(76, 13);
+            this.label11.TabIndex = 54;
+            this.label11.Text = "Alpha Gamma:";
+            // 
+            // NYBox
+            // 
+            this.NYBox.Location = new System.Drawing.Point(724, 350);
+            this.NYBox.Maximum = new decimal(new int[] {
+            64,
+            0,
+            0,
+            0});
+            this.NYBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.NYBox.Name = "NYBox";
+            this.NYBox.Size = new System.Drawing.Size(43, 20);
+            this.NYBox.TabIndex = 55;
+            this.NYBox.Value = new decimal(new int[] {
+            32,
+            0,
+            0,
+            0});
+            // 
             // BoberForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(869, 408);
+            this.ClientSize = new System.Drawing.Size(869, 417);
+            this.Controls.Add(this.NYBox);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.AlphaBox);
+            this.Controls.Add(this.GammaBox);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.NCrCbBox);
+            this.Controls.Add(this.QuantizeMethodBox);
+            this.Controls.Add(this.DCTButton);
             this.Controls.Add(this.DecimateOptionBox);
             this.Controls.Add(this.DecimateButton);
             this.Controls.Add(this.CbButton);
@@ -475,6 +603,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.CbTrack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CrTrack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YTrack1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NCrCbBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GammaBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AlphaBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NYBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,6 +650,14 @@
         private System.Windows.Forms.Button YCrCbButton;
         private System.Windows.Forms.Button DecimateButton;
         private System.Windows.Forms.ComboBox DecimateOptionBox;
+        private System.Windows.Forms.Button DCTButton;
+        private System.Windows.Forms.ComboBox QuantizeMethodBox;
+        private System.Windows.Forms.NumericUpDown NCrCbBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown GammaBox;
+        private System.Windows.Forms.NumericUpDown AlphaBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.NumericUpDown NYBox;
     }
 }
 

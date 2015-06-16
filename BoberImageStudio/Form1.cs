@@ -630,7 +630,291 @@ namespace BoberImageStudio
 
 
 #endregion: Прореживание
+#region: DCT
+        private void DCTButton_Click(object sender, EventArgs e)
+        {
+            int blockSize = 8;
+            Bitmap src = (Bitmap)OriginalImageBox.Image;
+            double[,] M = buildM(blockSize);
+            double[,] Mt = transpose(M, blockSize);
+            string quantizeMethod = QuantizeMethodBox.Text;
+            Bitmap res = DCT(src, M, Mt, blockSize, quantizeMethod);
+            ModifiedImageBox.Image = res;
+        }
 
+        private double[,] buildM(int blockSize)
+        {
+            double[,] M = new double[blockSize, blockSize];
+            for (int j = 0; j < blockSize; j++)
+            {
+                M[0, j] = 1.0 / Math.Sqrt(8);
+            }
+            for (int i = 1; i < blockSize; i++)
+            {
+                for (int j = 0; j < blockSize; j++)
+                {
+                    M[i, j] = 0.5 * Math.Cos(((2.0 * j + 1.0) * i * Math.PI) / 16.0);
+                }
+            }
+            return M;
+        }
+        private double[,] transpose(double[,] M, int size)
+        {
+            double[,] Mt = new double[size, size];
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    Mt[i, j] = M[j, i];
+                }
+            }
+            return Mt;
+        }
+        
+        private Bitmap DCT(Bitmap src, double[,] M, double[,] Mt, int blockSize, string quantizeMethod)
+        {
+            Bitmap res = new Bitmap(src.Width, src.Height);
+            var blocks = ListBlocks(src, blockSize).ToArray();
+            int nextBlock = 0;
+            YCrCbImage image = new YCrCbImage(src.Width, src.Height);
+            for (int i = 0; i < image.Height; i += blockSize)
+            {
+                for (int j = 0; j < image.Width; j += blockSize)
+                {
+                    YCrCbImage D = blocks[nextBlock];
+                    nextBlock++;
+                    YCrCbImage C = Multiply(M, D, Mt);
+                    switch (quantizeMethod)
+                    {
+                        case "N":
+                            {
+                                C = Quantize(C, Convert.ToInt32(NYBox.Text), Convert.ToInt32(NCrCbBox.Text));
+                            }
+                            break;
+                        case "Q":
+                            {
+                                C = Quantize(C, QuantizeMatrix( Convert.ToInt32(AlphaBox.Text),  Convert.ToInt32(GammaBox.Text), blockSize));
+                            }
+                            break;
+                        case "JPEG":
+                            {
+                                C = Quantize(C, QuantizeMatrix("Y"), QuantizeMatrix("CrCb"));
+                            }
+                            break;
+                    }
+                    C = Multiply(Mt, C, M);
+                    for (int k = 0; k < blockSize; k++)
+                    {
+                        for (int l = 0; l < blockSize; l++)
+                        {
+                            YCrCbPixel pixel = C.GetPixel(k, l);
+                            image.SetPixel(i + k, j + l, pixel);
+                        }
+                    }
+                }
+            }
+            res = toRGB(image);
+            return res;
+        }
+
+        private YCrCbImage Quantize(YCrCbImage C, int NY, int NCrCb)
+        {
+            throw new NotImplementedException();
+        }
+
+        private YCrCbImage Quantize(YCrCbImage C, int[,] Q)
+        {
+            YCrCbImage quantizedImage = new YCrCbImage(C.Width, C.Height);
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    YCrCbPixel pixel = C.GetPixel(i, j);
+                    int Yquantized = (pixel.Y / Q[i, j]);
+                    int Crquantized = (pixel.Cr / Q[i, j]);
+                    int Cbquantized = (pixel.Cb / Q[i, j]);
+                    Yquantized *= Q[i, j];
+                    Crquantized *= Q[i, j];
+                    Cbquantized *= Q[i, j];
+                    pixel = new YCrCbPixel(Yquantized, Crquantized, Cbquantized);
+                    quantizedImage.SetPixel(i, j, pixel);
+                }
+            }
+            return quantizedImage;
+        }
+
+        private YCrCbImage Quantize(YCrCbImage C, int[,] Y, int[,] CrCb)
+        {
+            YCrCbImage quantizedImage = new YCrCbImage(C.Width, C.Height);
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    YCrCbPixel pixel = C.GetPixel(i, j);
+                    int Yquantized = (pixel.Y / Y[i, j]);
+                    int Crquantized = (pixel.Cr / CrCb[i, j]);
+                    int Cbquantized = (pixel.Cb / CrCb[i, j]);
+                    Yquantized *= Y[i, j];
+                    Crquantized *= CrCb[i, j];
+                    Cbquantized *= CrCb[i, j];
+                    pixel = new YCrCbPixel(Yquantized, Crquantized, Cbquantized);
+                    quantizedImage.SetPixel(i, j, pixel);
+                }
+            }
+            return quantizedImage;
+        }
+
+        private int[,] QuantizeMatrix(int alpha, int gamma, int blockSize)
+        {
+            int[,] Q = new int[blockSize, blockSize];
+            for (int i = 0; i < blockSize; i++)
+            {
+                for (int j = 0; j < blockSize; j++)
+                {
+                    Q[i,j] = alpha * (1 + gamma * ( i + j + 2));
+                }
+            }
+            return Q;
+        }
+
+        private int[,] QuantizeMatrix(string channelName)
+        {
+            switch (channelName) 
+            {
+                case "Y":
+                    {
+                        int[,] Y = {{16, 11, 10, 16, 24, 40, 51, 61},
+                           {12, 12, 14, 19, 26, 58, 60, 55},
+                           {14, 13, 16, 24, 40, 57, 69, 56},
+                           {14, 17, 22, 29, 51, 87, 80, 62},
+                           {18, 22, 37, 56, 68, 109, 103, 77},
+                           {24, 35, 55, 64, 81, 104, 113, 92},
+                           {49, 64, 78, 87, 103, 121, 120, 101},
+                           {72, 92, 95, 98, 112, 100, 103, 99}
+                          };
+                        return Y;
+                    }
+                case "CrCb":
+                    {
+                        int[,] CrCb = {{17, 18, 24, 47, 99, 99, 99, 99},
+                              {18, 21, 26, 66, 99, 99, 99, 99},
+                              {24, 26, 56, 99, 99, 99, 99, 99},
+                              {47, 66, 99, 99, 99, 99, 99, 99},
+                              {99, 99, 99, 99, 99, 99, 99, 99},
+                              {99, 99, 99, 99, 99, 99, 99, 99},
+                              {99, 99, 99, 99, 99, 99, 99, 99},
+                              {99, 99, 99, 99, 99, 99, 99, 99}
+                             };
+                        return CrCb;
+                    }
+            }
+            return null;
+        }
+
+        private YCrCbImage Multiply(double[,] M, YCrCbImage D, double[,] Mt)
+        {
+            YCrCbImage C = new YCrCbImage(D.Width, D.Height);
+            YCrCbImage res = new YCrCbImage(D.Width, D.Height);
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    int Ytransformed = 0;
+                    int Crtransformed = 0;
+                    int Cbtransformed = 0;
+                    for (int k = 0; k < C.Width; k++)
+                    {
+                        YCrCbPixel pixel = D.GetPixel(k, j);
+                        Ytransformed += (int) (M[i, k] * pixel.Y);
+                        Crtransformed += (int) (M[i, k] * pixel.Cr);
+                        Cbtransformed += (int) (M[i, k] * pixel.Cb);
+                    }
+                    YCrCbPixel pixelTransformed = new YCrCbPixel(Ytransformed, Crtransformed, Cbtransformed);
+                    C.SetPixel(i, j, pixelTransformed);
+                }
+            }
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    int Ytransformed = 0;
+                    int Crtransformed = 0;
+                    int Cbtransformed = 0;
+                    for (int k = 0; k < C.Width; k++)
+                    {
+                        YCrCbPixel pixel = C.GetPixel(i, k);
+                        Ytransformed += (int) (pixel.Y * Mt[k, j]);
+                        Crtransformed += (int) (pixel.Cr * Mt[k, j]);
+                        Cbtransformed += (int) (pixel.Cb * Mt[k, j]);
+                    }
+                    YCrCbPixel pixelTransformed = new YCrCbPixel(Ytransformed, Crtransformed, Cbtransformed);
+                    res.SetPixel(i, j, pixelTransformed);
+                }
+            }
+            return res;
+        }
+
+        private IEnumerable<YCrCbImage> ListBlocks(Bitmap src, int blockSize)
+        {
+            YCrCbImage image = toYCrCb(src);
+            for (int i = 0; i < image.Height; i += blockSize)
+            {
+                for (int j = 0; j < image.Width; j += blockSize)
+                {
+                    YCrCbImage block = new YCrCbImage(blockSize, blockSize);
+                    for (int k = 0; k < blockSize; k++)
+                    {
+                        for (int l = 0; l < blockSize; l++)
+                        {
+                            YCrCbPixel pixel = image.GetPixel(i + k, j + l);
+                            block.SetPixel(k, l, pixel);
+                        }
+                    }
+                    yield return block;
+                }
+            }
+        }
+
+        private YCrCbImage toYCrCb(Bitmap src)
+        {
+            YCrCbImage res = new YCrCbImage(src.Width, src.Height);
+            for (int i = 0; i < src.Height; i++)
+            {
+                for (int j = 0; j < src.Width; j++)
+                {
+                    Color color = src.GetPixel(i, j);
+                    int R = color.R;
+                    int G = color.G;
+                    int B = color.B;
+                    int Y = y(R, G, B);
+                    int Cr = cr(R, G, B);
+                    int Cb = cb(R, G, B);
+                    YCrCbPixel pixel = new YCrCbPixel(Y, Cr, Cb);
+                    res.SetPixel(i, j, pixel);
+                }
+            }
+            return res;
+        }
+
+        private Bitmap toRGB(YCrCbImage image)
+        {
+            Bitmap res = new Bitmap(image.Width, image.Height);
+            for (int i = 0; i < res.Height; i++)
+            {
+                for (int j = 0; j < res.Width; j++)
+                {
+                    YCrCbPixel pixel = image.GetPixel(i, j);
+                    int R = toCorrectRange(r1(pixel.Y, pixel.Cr, pixel.Cb));
+                    int G = toCorrectRange(g1(pixel.Y, pixel.Cr, pixel.Cb));
+                    int B = toCorrectRange(b1(pixel.Y, pixel.Cr, pixel.Cb));
+                    Color color = Color.FromArgb(R, G, B);
+                    res.SetPixel(i, j, color);
+                }
+            }
+            return res;
+        }
+        
+#endregion: DCT
 
     }
 }
