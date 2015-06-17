@@ -509,7 +509,32 @@ namespace BoberImageStudio
         #endregion: Отдельный вывод каналов Y, Cr, Cb
 
 
-
+#region: Вещественное преобразование YCrCb
+        private double _y(int R, int G, int B)
+        {
+            return (0.299 * R + 0.587 * G + 0.114 * B);
+        }
+        private double _cr(int R, int G, int B)
+        {
+            return (0.5 * R - 0.4187 * G - 0.0813 * B + 128);
+        }
+        private double _cb(int R, int G, int B)
+        {
+            return (-0.1687 * R - 0.3313 * G + 0.5 * B + 128);
+        }
+        private int _r1(double Y, double Cr, double Cb)
+        {
+            return (int)(Y + 1.402 * (Cr - 128));
+        }
+        private int _g1(double Y, double Cr, double Cb)
+        {
+            return (int)(Y - 0.34414 * (Cb - 128) - 0.71414 * (Cr - 128));
+        }
+        private int _b1(double Y, double Cr, double Cb)
+        {
+            return (int)(Y + 1.772 * (Cb - 128));
+        }
+        #endregion: Вещественное Преобразование YCrCb
 #region: Прореживание
         private void DecimateButton_Click(object sender, EventArgs e)
         {
@@ -719,7 +744,41 @@ namespace BoberImageStudio
 
         private YCrCbImage Quantize(YCrCbImage C, int NY, int NCrCb)
         {
-            throw new NotImplementedException();
+            YCrCbImage res = new YCrCbImage(C.Width, C.Height);
+            int[] Ycoefs = new int[C.Width * C.Height];
+            int[] Crcoefs = new int[C.Width * C.Height];
+            int[] Cbcoefs = new int[C.Width * C.Height];
+            int next = 0;
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    YCrCbPixel pixel = C.GetPixel(i,j);
+                    Ycoefs[next] = pixel.Y;
+                    Crcoefs[next] = pixel.Cr;
+                    Cbcoefs[next] = pixel.Cb;
+                    next++;
+                }
+            }
+            Array.Sort(Ycoefs, new Comparison<int>((i1, i2) => i2.CompareTo(i1)));
+            Array.Sort(Crcoefs, new Comparison<int>((i1, i2) => i2.CompareTo(i1)));
+            Array.Sort(Cbcoefs, new Comparison<int>((i1, i2) => i2.CompareTo(i1)));
+            int Ymin = Ycoefs[NY - 1];
+            int Crmin = Crcoefs[NCrCb - 1];
+            int Cbmin = Cbcoefs[NCrCb - 1];
+            for (int i = 0; i < C.Height; i++)
+            {
+                for (int j = 0; j < C.Width; j++)
+                {
+                    YCrCbPixel pixel = C.GetPixel(i, j);
+                    int Y = pixel.Y >= Ymin ? pixel.Y : 0;
+                    int Cr = pixel.Cr >= Crmin ? pixel.Cr : 0;
+                    int Cb = pixel.Cb >= Cbmin ? pixel.Cb : 0;
+                    pixel = new YCrCbPixel(Y, Cr, Cb);
+                    res.SetPixel(i, j, pixel);
+                }
+            }
+            return res;
         }
 
         private YCrCbImage Quantize(YCrCbImage C, int[,] Q)
@@ -913,8 +972,6 @@ namespace BoberImageStudio
             }
             return res;
         }
-        
 #endregion: DCT
-
     }
 }
