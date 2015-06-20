@@ -64,7 +64,7 @@
             this.YCrCbButton = new System.Windows.Forms.Button();
             this.DecimateButton = new System.Windows.Forms.Button();
             this.DecimateOptionBox = new System.Windows.Forms.ComboBox();
-            this.DCTButton = new System.Windows.Forms.Button();
+            this.CompressButton = new System.Windows.Forms.Button();
             this.QuantizeMethodBox = new System.Windows.Forms.ComboBox();
             this.NCrCbBox = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -72,6 +72,8 @@
             this.AlphaBox = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.NYBox = new System.Windows.Forms.NumericUpDown();
+            this.FileNameBox = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.OriginalImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ModifiedImageBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.YTrack)).BeginInit();
@@ -436,15 +438,15 @@
             this.DecimateOptionBox.Size = new System.Drawing.Size(121, 21);
             this.DecimateOptionBox.TabIndex = 47;
             // 
-            // DCTButton
+            // CompressButton
             // 
-            this.DCTButton.Location = new System.Drawing.Point(599, 321);
-            this.DCTButton.Name = "DCTButton";
-            this.DCTButton.Size = new System.Drawing.Size(75, 23);
-            this.DCTButton.TabIndex = 48;
-            this.DCTButton.Text = "DCT";
-            this.DCTButton.UseVisualStyleBackColor = true;
-            this.DCTButton.Click += new System.EventHandler(this.DCTButton_Click);
+            this.CompressButton.Location = new System.Drawing.Point(599, 321);
+            this.CompressButton.Name = "CompressButton";
+            this.CompressButton.Size = new System.Drawing.Size(75, 23);
+            this.CompressButton.TabIndex = 48;
+            this.CompressButton.Text = "Compress";
+            this.CompressButton.UseVisualStyleBackColor = true;
+            this.CompressButton.Click += new System.EventHandler(this.CompressButton_Click);
             // 
             // QuantizeMethodBox
             // 
@@ -475,7 +477,7 @@
             this.NCrCbBox.Size = new System.Drawing.Size(43, 20);
             this.NCrCbBox.TabIndex = 50;
             this.NCrCbBox.Value = new decimal(new int[] {
-            32,
+            8,
             0,
             0,
             0});
@@ -492,6 +494,11 @@
             // GammaBox
             // 
             this.GammaBox.Location = new System.Drawing.Point(771, 375);
+            this.GammaBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.GammaBox.Name = "GammaBox";
             this.GammaBox.Size = new System.Drawing.Size(43, 20);
             this.GammaBox.TabIndex = 52;
@@ -504,6 +511,11 @@
             // AlphaBox
             // 
             this.AlphaBox.Location = new System.Drawing.Point(724, 375);
+            this.AlphaBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.AlphaBox.Name = "AlphaBox";
             this.AlphaBox.Size = new System.Drawing.Size(43, 20);
             this.AlphaBox.TabIndex = 53;
@@ -539,16 +551,35 @@
             this.NYBox.Size = new System.Drawing.Size(43, 20);
             this.NYBox.TabIndex = 55;
             this.NYBox.Value = new decimal(new int[] {
-            32,
+            12,
             0,
             0,
             0});
+            // 
+            // FileNameBox
+            // 
+            this.FileNameBox.Location = new System.Drawing.Point(694, 407);
+            this.FileNameBox.Name = "FileNameBox";
+            this.FileNameBox.Size = new System.Drawing.Size(120, 20);
+            this.FileNameBox.TabIndex = 56;
+            this.FileNameBox.Text = "Compressed_01";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(596, 410);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(89, 13);
+            this.label12.TabIndex = 57;
+            this.label12.Text = "Default file name:";
             // 
             // BoberForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(869, 417);
+            this.ClientSize = new System.Drawing.Size(869, 439);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.FileNameBox);
             this.Controls.Add(this.NYBox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.AlphaBox);
@@ -556,7 +587,7 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.NCrCbBox);
             this.Controls.Add(this.QuantizeMethodBox);
-            this.Controls.Add(this.DCTButton);
+            this.Controls.Add(this.CompressButton);
             this.Controls.Add(this.DecimateOptionBox);
             this.Controls.Add(this.DecimateButton);
             this.Controls.Add(this.CbButton);
@@ -650,7 +681,7 @@
         private System.Windows.Forms.Button YCrCbButton;
         private System.Windows.Forms.Button DecimateButton;
         private System.Windows.Forms.ComboBox DecimateOptionBox;
-        private System.Windows.Forms.Button DCTButton;
+        private System.Windows.Forms.Button CompressButton;
         private System.Windows.Forms.ComboBox QuantizeMethodBox;
         private System.Windows.Forms.NumericUpDown NCrCbBox;
         private System.Windows.Forms.Label label7;
@@ -658,6 +689,8 @@
         private System.Windows.Forms.NumericUpDown AlphaBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.NumericUpDown NYBox;
+        private System.Windows.Forms.TextBox FileNameBox;
+        private System.Windows.Forms.Label label12;
     }
 }
 
